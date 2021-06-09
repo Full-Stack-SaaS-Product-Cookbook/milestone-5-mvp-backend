@@ -1,0 +1,32 @@
+{
+  "name": "reduxplate-code-generator",
+  "version": "1.0.0",
+  "description": "Uses the TypeScript compiler API to generate Redux code from the Redux state.",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "npm run build && node dist/test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://princefishthrower@bitbucket.org/princefishthrower/ReduxPlateApi.git"
+  },
+  "keywords": [
+    "code-generator",
+    "code-printer",
+    "typescript",
+    "typescript-ast",
+    "typescript-compiler",
+    "typescript"
+  ],
+  "author": "Chris Frewin",
+  "license": "MIT",
+  "homepage": "https://bitbucket.org/princefishthrower/ReduxPlateApi#readme",
+  "dependencies": {
+    "ts-morph": "^11.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^15.12.0",
+    "typescript": "^4.3.2"
+  }
+}

@@ -1,0 +1,44 @@
+pipelines:
+    branches:
+        master:
+            - step:
+                name: Install dependencies and build Node.js code generator microservice
+                image: node:14.17.0
+                caches:
+                    - node
+                script:
+                    - cd Microservices/reduxplate-code-generator && npm install && npm run build
+                artifacts:
+                    - Microservices/reduxplate-code-generator/dist/**
+            - step:
+                name: Run .NET Core publish
+                image: mcr.microsoft.com/dotnet/sdk:5.0
+                caches:
+                    - dotnetcore
+                script:
+                    - dotnet publish --configuration Release -p:EnvironmentName=Production
+                artifacts:
+                    - bin/Release/net5.0/publish/**
+            - step:
+                name: Deploy .NET artifacts using SCP to server
+                deployment: production
+                script:
+                    - pipe: 'atlassian/scp-deploy:0.3.3'
+                      variables:
+                        LOCAL_PATH: 'bin/Release/net5.0/publish/**'
+                        REMOTE_PATH: '/var/www/ReduxPlateApi'
+                        SERVER: $SERVER
+                        USER: $USER
+            - step:
+                name: Deploy Node.js artifacts using SCP to server
+                script:
+                    - pipe: 'atlassian/scp-deploy:0.3.3'
+                      variables:
+                        LOCAL_PATH: 'Microservices/reduxplate-code-generator/dist/**'
+                        REMOTE_PATH: '/var/www/ReduxPlateApi/Microservices/reduxplate-code-generator/dist'
+                        SERVER: $SERVER
+                        USER: $USER
+            - step:
+                name: SSH into server and restart Kestral
+                script: 
+                     - ssh $USER@$SERVER '/bin/bash /root/scripts/api_postbuild.sh'

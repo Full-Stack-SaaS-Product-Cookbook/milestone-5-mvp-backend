@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "removeComments": false,
+    "preserveConstEnums": true,
+    "resolveJsonModule": true,
+    "outDir": "./dist",
+    "lib": [ "es2016", "dom" ],
+    "downlevelIteration": true
+  },
+  "include": [ "./src/**/*" ]
+}
